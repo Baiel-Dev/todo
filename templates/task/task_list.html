@@ -1,0 +1,52 @@
+
+{% extends 'base.html' %}
+{% block title %}
+    <title>Students</title>
+{% endblock title %}
+
+{% block header %}
+    <header>
+        {{ name }}
+    </header>
+{% endblock header %}
+
+{% block search %}
+    <div class="search-container">
+        <form action="{% url 'search-task' %}" method="get">
+            <input type="text" placeholder="Search..." name="q">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+{% endblock search %}
+{% block article %}
+    <article>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>task_name</th>
+                <th>task</th>
+                <th>time</th>
+                <th colspan="2">Action</th>
+            </tr>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.task_name }}</td>
+                    <td>{{ task.task }}</td>
+                    <td>{{ task.time }}</td>
+                    <td><a href="{% url 'edit-task' task.id %}">Edit</a></td>
+                    <td>
+                        <a
+                                onclick="return confirm('Do you really to delete this student!')"
+                                href="{% url 'delete-task' task.id %}">Delete
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <form method="get" action="{% url 'create_task' %}">
+            <input type="submit" value="ADD"
+                   style="background-color: skyblue; border-radius: 10px; font-size: 40px; display: block; margin: 0 auto; width: 100px;">
+        </form>
+    </article>
+{% endblock article %}

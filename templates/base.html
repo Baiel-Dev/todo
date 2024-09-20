@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}
+    {% endblock title %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Style the header */
+        header {
+            background-color: #4CAF50;
+            padding: 20px;
+            text-align: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Style navigation */
+        nav {
+            background-color: #333;
+            padding: 20px;
+            width: 100%;
+            display: block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #45a049;
+        }
+
+        /* Content section */
+        section {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        article {
+            flex-grow: 1;
+            background-color: #fff;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Mobile-friendly navigation */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li a {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+
+            article {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+{% block header %}
+{% endblock header %}
+
+<section>
+    <nav>
+        <ul>
+            <li><a href="{% url 'list-task' %}">Task</a></li>
+            <li><a href="{% url 'easy_list-task' %}">easy_Task</a></li>
+{#            <li><a href="{% url 'list-teacher' %}">Teachers</a></li>#}
+{#            <li><a href="{% url 'list-student' %}">Students</a></li>#}
+        </ul>
+        {% block search %}
+        {% endblock search %}
+    </nav>
+
+    {% block article %}
+    {% endblock article %}
+</section>
+
+{% block footer %}
+{% endblock footer %}
+</body>
+</html>
