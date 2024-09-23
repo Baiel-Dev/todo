@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Main Page
+{% endblock title %}
+
+{% block header %}
+    <header>Main Page</header>
+{% endblock header %}
+
+{% block article %}
+    <article>
+        <h2>Welcome to the Main Page</h2>
+        <p>Total tasks: {{ task_count }}</p>
+        <p>Total easy tasks: {{ easy_task_count }}</p>
+        <p>Total hard tasks: {{ hard_task_count }}</p>
+
+        <h3>Task Completion</h3>
+        <p>Total Completed Tasks: {{ completed_tasks }}</p>
+        <p>Total Not Completed Tasks: {{ not_completed_tasks }}</p>
+
+        <h3>Easy Tasks</h3>
+        <p>Completed Easy Tasks: {{ completed_easy_tasks }}</p>
+        <p>Not Completed Easy Tasks: {{ not_completed_easy_tasks }}</p>
+
+        <h3>Hard Tasks</h3>
+        <p>Completed Hard Tasks: {{ completed_hard_tasks }}</p>
+        <p>Not Completed Hard Tasks: {{ not_completed_hard_tasks }}</p>
+
+        <a href="{% url 'list-task' %}">
+            <button>Tasks</button>
+        </a>
+        <a href="{% url 'easy_list-task' %}">
+            <button>Easy Tasks</button>
+        </a>
+        <a href="{% url 'hard_list-task' %}">
+            <button>Hard Tasks</button>
+        </a>
+    </article>
+{% endblock article %}
+
+{% block footer %}
+    <footer>© 2024 Task Manager</footer>
+{% endblock footer %}

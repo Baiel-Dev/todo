@@ -51,3 +51,15 @@ def delete_task(request, pk):
         return redirect('list-task')
     task.delete()
     return redirect('list-task')
+
+
+from django.shortcuts import get_object_or_404
+from task.models import Hard
+
+def toggle_task_completion(request, pk):
+    task = get_object_or_404(Task, pk=pk)  # Обязательно используем Task здесь
+    task.is_completed = not task.is_completed
+    task.save()
+    return redirect('list-task')
+
+

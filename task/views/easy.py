@@ -55,3 +55,10 @@ def easy_delete_task(request, pk):
     task.delete()
     return redirect('easy_list-task')
 
+from django.shortcuts import get_object_or_404
+
+def toggle_task_completion(request, pk):
+    easy = get_object_or_404(Easy, pk=pk)  # Обязательно используем Task здесь
+    easy.is_completed = not easy.is_completed
+    easy.save()
+    return redirect('easy_list-task')
