@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Categories{% endblock title %}
+
+{% block content %}
+    <div class="categories-list">
+        <h2>Categories</h2>
+
+        {% if categories %}
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Tasks Count</th> <!-- Колонка для количества задач -->
+                </tr>
+                </thead>
+                <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>
+                            {% if category.tasks.count > 0 %}
+                                <a href="{% url 'tasks-by-category' category.id %}">{{ category.name }}</a>
+                            {% else %}
+                                {{ category.name }}
+                            {% endif %}
+                        </td>
+                        <td>{{ category.task.count }}</td> <!-- Количество задач в категории -->
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No categories available.</p>
+        {% endif %}
+    </div>
+
+    <style>
+        .categories-list h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+        }
+
+        .categories-list a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .categories-list a:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock content %}

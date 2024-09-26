@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Create Task{% endblock title %}
+{% block title %}Edit Task{% endblock title %}
 
 {% block content %}
     <div class="form-container">
-        <h2>Create New Task</h2>
+        <h2>Edit Task</h2>
         <form method="POST">
             {% csrf_token %}
             {{ form.non_field_errors }}
+
             <div class="form-group">
                 <label for="id_title">Title</label>
                 {{ form.title }}
@@ -40,10 +41,10 @@
 
             <div class="button-group">
                 <button type="submit" class="btn btn-primary">
-                    Create Task
+                    Update Task
                 </button>
 
-                <a href="{% url 'list-task' %}" class="btn btn-secondary">Back to List</a>
+                <a href="{% url 'list-task' %}" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
         <br>

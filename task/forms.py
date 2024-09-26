@@ -1,5 +1,5 @@
 from  django import forms
-from task.models import Task,Easy,Hard
+from task.models import Task
 
 class TaskForm(forms.ModelForm):
     class Meta:
@@ -7,15 +7,3 @@ class TaskForm(forms.ModelForm):
         fields = '__all__'
 
 
-class EasyForm(forms.ModelForm):
-    class Meta:
-        model = Easy
-        fields = '__all__'
-
-class HardForm(forms.ModelForm):
-    class Meta:
-        model = Hard
-        fields = '__all__'
-        widgets = {
-            'category': forms.Select()  # Явно указываем, что это выпадающий список
-        }
