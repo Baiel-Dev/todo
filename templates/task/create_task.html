@@ -7,35 +7,45 @@
         <h2>Create New Task</h2>
         <form method="POST">
             {% csrf_token %}
-            {{ form.non_field_errors }}
+
             <div class="form-group">
                 <label for="id_title">Title</label>
                 {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="error">{{ form.title.errors }}</div>
+                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="id_description">Description</label>
                 {{ form.description }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_status">Status</label>
-                {{ form.status }}
+                {% if form.description.errors %}
+                    <div class="error">{{ form.description.errors }}</div>
+                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="id_due_date">Due Date</label>
-                {{ form.due_date }}
+                {{ form.due_date }}  <!-- Измените на правильное поле даты -->
+                {% if form.due_date.errors %}
+                    <div class="error">{{ form.due_date.errors }}</div>
+                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="id_category">Category</label>
                 {{ form.category }}
+                {% if form.category.errors %}
+                    <div class="error">{{ form.category.errors }}</div>
+                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="id_priority">Priority</label>
                 {{ form.priority }}
+                {% if form.priority.errors %}
+                    <div class="error">{{ form.priority.errors }}</div>
+                {% endif %}
             </div>
 
             <div class="button-group">
@@ -50,6 +60,12 @@
     </div>
 
     <style>
+        .error {
+            color: red; /* Цвет текста для ошибок */
+            font-size: 0.9em; /* Размер текста для ошибок */
+            margin-top: 5px; /* Отступ сверху для ошибок */
+        }
+
         .button-group {
             display: flex;
             gap: 10px; /* Отступ между кнопками */
@@ -59,7 +75,7 @@
         .form-container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: white;
+            background-color: #343a49; /* Цвет фона контейнера */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -68,6 +84,7 @@
         .form-container h2 {
             text-align: center;
             margin-bottom: 20px;
+            color: white; /* Цвет заголовка */
         }
 
         .form-group {
@@ -78,6 +95,7 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            color: white; /* Цвет меток */
         }
 
         input, textarea, select {
@@ -86,6 +104,8 @@
             margin-bottom: 10px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            background-color: white; /* Белый фон для полей ввода */
+            color: #333; /* Цвет текста в полях */
         }
 
         .btn {

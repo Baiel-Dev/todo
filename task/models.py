@@ -1,6 +1,6 @@
-from datetime import datetime
-
 from django.db import models
+from django.utils import timezone  # Импортируйте timezone для получения текущей даты
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     def __str__(self):
@@ -16,12 +16,11 @@ class Task(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     status = models.BooleanField(default=False)
-    date = models.DateField(default=datetime.date)
+    due_date = models.DateField(default=timezone.now)
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        related_name='tasks',
-        default=3,
+        related_name='tasks'
     )
     priority = models.ForeignKey(
         Priority,

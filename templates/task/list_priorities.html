@@ -11,7 +11,7 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Tasks Count</th> <!-- Колонка для количества задач -->
+                    <th>Tasks Count</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,7 +24,7 @@
                                 {{ priority.name }}
                             {% endif %}
                         </td>
-                        <td>{{ priorities.count }}</td> <!-- Количество задач в приоритете -->
+                        <td>{{ priority.tasks.count }}</td> <!-- Количество задач в приоритете -->
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -35,34 +35,76 @@
     </div>
 
     <style>
-        .priorities-list h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
+        /* Container Styling */
+        .priorities-list {
+            background-color: #343a40; /* Dark background */
+            padding: 30px;
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
+        /* Heading */
+        .priorities-list h2 {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #f8f9fa;
+        }
+
+        /* Table Styling */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #343a40;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         table th, table td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 15px;
             text-align: left;
+            border-bottom: 1px solid #6c757d;
+            color: white;
         }
 
         table th {
-            background-color: #f4f4f4;
+            background-color: #495057;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
+        table td {
+            background-color: #3c4048;
+            transition: background-color 0.3s ease;
+        }
+
+        table td:hover {
+            background-color: #495057;
+        }
+
+        /* Link Styling */
         .priorities-list a {
-            color: #007bff;
+            color: #17a2b8;
             text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
         }
 
         .priorities-list a:hover {
+            color: #0d6efd;
             text-decoration: underline;
+        }
+
+        /* No priorities message */
+        p {
+            text-align: center;
+            font-size: 18px;
+            color: #ffc107;
         }
     </style>
 {% endblock content %}

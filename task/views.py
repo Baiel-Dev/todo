@@ -10,6 +10,19 @@ def list_tasks(request):
     categories = Category.objects.all()
     priorities = Priority.objects.all()
     today = timezone.now().date()
+    search_task = request.GET.get('search_task')
+    category_id = request.GET.get('category')
+    priority_id = request.GET.get('priority')
+
+    if search_task:
+        tasks = tasks.filter(title__icontains=search_task)
+
+    if category_id:
+        tasks = tasks.filter(category_id=category_id)
+
+    if priority_id:
+        tasks = tasks.filter(priority_id=priority_id)
+
     return render(
         request,
         'task/task_list.html',
@@ -48,11 +61,12 @@ def create_task(request):
         if form.is_valid():
             form.save()
             return redirect('list-task')
-        else:
-            return render(request, 'task/create_task.html', {'form': form})
+        # else:
+        #     return render(request, 'task/create_task.html', {'form': form})
     else:
         form = TaskForm()
         return render(request, 'task/create_task.html', {'form': form})
+
 
 def edit_task(request, pk):
     task = Task.objects.get(pk=pk)

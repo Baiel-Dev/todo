@@ -11,20 +11,20 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Tasks Count</th> <!-- Колонка для количества задач -->
+                    <th>Tasks Count</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for category in categories %}
                     <tr>
                         <td>
-                            {% if category.tasks.count > 0 %}
+                            {% if category.task.count > 0 %}
                                 <a href="{% url 'tasks-by-category' category.id %}">{{ category.name }}</a>
                             {% else %}
                                 {{ category.name }}
                             {% endif %}
                         </td>
-                        <td>{{ category.task.count }}</td> <!-- Количество задач в категории -->
+                        <td>{{ category.tasks.count }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -35,34 +35,75 @@
     </div>
 
     <style>
-        .categories-list h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
+        /* Container Styling */
+        .categories-list {
+            background-color: #343a40;
+            padding: 30px;
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .categories-list h2 {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #f8f9fa;
+        }
+
+        /* Table Styling */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #495057;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         table th, table td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 15px;
             text-align: left;
+            border-bottom: 1px solid #6c757d;
+            color: white;
         }
 
         table th {
-            background-color: #f4f4f4;
+            background-color: #6c757d;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
+        table td {
+            background-color: #343a40;
+            transition: background-color 0.3s ease;
+        }
+
+        table td:hover {
+            background-color: #495057;
+        }
+
+        /* Link Styling */
         .categories-list a {
-            color: #007bff;
+            color: #17a2b8;
             text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
         }
 
         .categories-list a:hover {
+            color: #0d6efd;
             text-decoration: underline;
+        }
+
+        /* No categories message */
+        p {
+            text-align: center;
+            font-size: 18px;
+            color: #ffc107;
         }
     </style>
 {% endblock content %}
