@@ -1,5 +1,5 @@
 from django.contrib import admin
-from task.models import Task, Category, Priority
+from .models import Task, Category, Priority, TaskCustomUser
 
 
 @admin.register(Category)
@@ -22,3 +22,10 @@ class TaskAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')
     search_fields = ('title',)
     list_filter = ('category', 'priority')
+
+
+@admin.register(TaskCustomUser)
+class TaskCustomUserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'is_staff', 'is_active')
+    search_fields = ('username', 'email')
+    list_filter = ('is_staff', 'is_active')

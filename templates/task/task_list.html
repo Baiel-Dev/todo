@@ -7,24 +7,27 @@
         <h2>Tasks</h2>
         <a href="{% url 'create-task' %}" class="btn btn-primary create-button">Создать</a>
 
-        <form method="GET" style="margin-bottom: 30px;">
+        <form method="GET" id="filterForm" style="margin-bottom: 30px;">
             <input type="text" name="search_task" placeholder="Поиск по задачам" value="{{ request.GET.search_task }}">
-            <select name="category" id="category">
+
+            <select name="category" id="category" onchange="this.form.submit()">
                 <option value="">Все категории</option>
                 {% for category in categories %}
-                    <option value="{{ category.id }}"
-                            {% if category.id == request.GET.category %}selected{% endif %}>{{ category.name }}</option>
+                    <option value="{{ category.id }}" {% if category.id|stringformat:"s" == request.GET.category|stringformat:"s" %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
                 {% endfor %}
             </select>
-            <select name="priority" id="priority">
+            <select name="priority" id="priority" onchange="this.form.submit()">
                 <option value="">Все приоритеты</option>
                 {% for priority in priorities %}
-                    <option value="{{ priority.id }}"
-                            {% if priority.id == request.GET.priority %}selected{% endif %}>{{ priority.name }}</option>
+                    <option value="{{ priority.id }}" {% if priority.id|stringformat:"s" == request.GET.priority|stringformat:"s" %}selected{% endif %}>
+                        {{ priority.name }}
+                    </option>
                 {% endfor %}
             </select>
-            <button type="submit" class="btn btn-search">Поиск</button>
         </form>
+<p>Вы вошли как: {{ user.username }}</p>
 
         {% if tasks %}
             <table>
@@ -33,7 +36,7 @@
                     <th>Title</th>
                     <th>Description</th>
                     <th>Status</th>
-                    <th>Due Date</th>
+                    <th>Due Date</th>  <!-- Добавлено отображение дедлайна -->
                     <th>Category</th>
                     <th>Priority</th>
                     <th>Actions</th>
@@ -41,7 +44,7 @@
                 </thead>
                 <tbody>
                 {% for task in tasks %}
-                    <tr {% if task.due_date < today %}class="overdue"{% endif %}>
+                    <tr {% if task.due_date < today and not task.status %}class="overdue"{% endif %}>
                         <td style="color: white;">{{ task.title }}</td>
                         <td style="color: white;">{{ task.description|default:"No description" }}</td>
                         <td>
@@ -51,7 +54,7 @@
                                 <span class="status incomplete">&#10006;</span>
                             {% endif %}
                         </td>
-                        <td style="color: white;">{{ task.due_date }}</td>
+                        <td style="color: white;">{{ task.due_date }}</td> <!-- Отображение дедлайна -->
                         <td style="color: white;">{{ task.category.name }}</td>
                         <td style="color: white;">{{ task.priority.name }}</td>
                         <td>
@@ -66,7 +69,8 @@
                 {% endfor %}
                 </tbody>
             </table>
-        {% else %}<h1>No Tasks &#10006;</h1>
+        {% else %}
+            <h1>No Tasks &#10006;</h1>
         {% endif %}
     </div>
 
@@ -83,7 +87,7 @@
             padding: 30px;
             border-radius: 10px;
             color: white;
-            position: relative; /* Added for absolute positioning of the button */
+            position: relative;
         }
 
         .tasks-list h2 {
@@ -95,14 +99,12 @@
             color: #f8f9fa;
         }
 
-        /* Positioning the "Создать" button */
         .create-button {
             position: absolute;
             top: 20px;
             right: 20px;
         }
 
-        /* Form search styles */
         form {
             display: flex;
             justify-content: space-between;
@@ -137,7 +139,6 @@
             background-color: #138496;
         }
 
-        /* Table styles */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -179,7 +180,6 @@
             background-color: #f8d7da;
         }
 
-        /* Button styles */
         .btn {
             text-decoration: none;
             padding: 7px 12px;
@@ -193,7 +193,15 @@
         }
 
         .btn-edit {
-            background-color: #ffc107;
+            background-color: #ffeb3b;
+            color: black;
+            font-weight: bold;
+            padding: 7px 12px;
+            font-size: 16px;
+        }
+
+        .btn-edit:hover {
+            background-color: #fbc02d;
         }
 
         .btn-delete {
@@ -208,4 +216,14 @@
             opacity: 0.85;
         }
     </style>
+
+    <script>
+        document.getElementById('category').addEventListener('change', function () {
+            document.getElementById('filterForm').submit();
+        });
+
+        document.getElementById('priority').addEventListener('change', function () {
+            document.getElementById('filterForm').submit();
+        });
+    </script>
 {% endblock content %}

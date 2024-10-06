@@ -18,7 +18,7 @@
                 {% for category in categories %}
                     <tr>
                         <td>
-                            {% if category.task.count > 0 %}
+                            {% if category.tasks.count > 0 %}
                                 <a href="{% url 'tasks-by-category' category.id %}">{{ category.name }}</a>
                             {% else %}
                                 {{ category.name }}
