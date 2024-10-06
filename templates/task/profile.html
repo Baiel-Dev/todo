@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h2>Профиль пользователя: {{ profile.user.username }}</h2>
+    <p>Электронная почта: {{ profile.user.email }}</p>
+    <p>Информация о пользователе: {{ profile.bio }}</p>
+    <a href="{% url 'edit-profile' profile.user.pk %}">Редактировать профиль</a>
+</body>
+</html>

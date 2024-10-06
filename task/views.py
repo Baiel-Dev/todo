@@ -3,23 +3,37 @@ from django.utils import timezone
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import TemplateView
-from .forms import SignUpForm, TaskForm
-from .models import Task, Category, Priority
+from .forms import SignUpForm, TaskForm, ProfileForm
+from .models import Task, Category, Priority, TaskCustomUser
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from .models import Profile
 
-# Регистрация пользователя
+
+@login_required
+def profile(request, pk):
+    user = get_object_or_404(TaskCustomUser, pk=pk)
+    profile = get_object_or_404(Profile, user=user)  # Изменено на get_object_or_404
+    return render(request, 'task/profile.html', {'profile': profile})
+
+
+from django.shortcuts import render, redirect
+from .forms import SignUpForm
+from .models import Profile
+
+
 def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()  # Сохранение нового пользователя
-            login(request, user)  # Логин пользователя сразу после регистрации
-            return redirect('home')  # Перенаправление на главную страницу
-        else:
-            print(form.errors)  # Вывод ошибок формы в консоль
+            user = form.save()  # Создание пользователя
+            # Создание профиля (это уже сделает сигнал)
+            return redirect('profile', pk=user.pk)  # Перенаправление на страницу профиля
     else:
-        form = SignUpForm()  # Создание новой формы
+        form = SignUpForm()
+    # return render(request, 'register.html', {'form': form})
     return render(request, 'task/register.html', {'form': form})
+
 
 # Вход в систему
 def login_view(request):
@@ -33,9 +47,11 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'task/login.html', {'form': form})
 
+
 # Главная страница
 class HomeView(TemplateView):
     template_name = 'task/home.html'
+
 
 # Список задач
 @login_required
@@ -71,6 +87,7 @@ def list_tasks(request):
         }
     )
 
+
 # Задачи по категории
 @login_required
 def tasks_by_category(request, category_id):
@@ -82,6 +99,7 @@ def tasks_by_category(request, category_id):
         {'tasks': tasks}
     )
 
+
 # Задачи по приоритету
 @login_required
 def tasks_by_priority(request, priority_id):
@@ -92,6 +110,7 @@ def tasks_by_priority(request, priority_id):
         'task/task_list.html',
         {'tasks': tasks}
     )
+
 
 # Создание задачи
 @login_required
@@ -107,7 +126,12 @@ def create_task(request):
         form = TaskForm()
     return render(request, 'task/create_task.html', {'form': form})
 
-# Редактирование задачи
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Task
+from .forms import TaskForm
+
+
 @login_required
 def edit_task(request, pk):
     task = get_object_or_404(Task, pk=pk, user=request.user)  # Проверка пользователя
@@ -120,12 +144,28 @@ def edit_task(request, pk):
         form = TaskForm(instance=task)
     return render(request, 'task/edit_task.html', {'form': form})
 
+
+@login_required
+def edit_profile(request, pk):
+    user = get_object_or_404(TaskCustomUser, pk=pk)
+    profile = Profile.objects.get(user=user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', pk=user.pk)  # Перенаправление на страницу профиля
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'edit_profile.html', {'form': form})
+
+
 # Удаление задачи
 @login_required
 def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk, user=request.user)  # Проверка пользователя
     task.delete()
     return redirect('list-task')  # Перенаправление на список задач
+
 
 # Переключение статуса задачи
 @login_required
@@ -135,17 +175,20 @@ def toggle_task_status(request, pk):
     task.save()
     return redirect('list-task')  # Перенаправление на список задач
 
+
 # Список категорий
 @login_required
 def list_categories(request):
     categories = Category.objects.all()
     return render(request, 'task/list_categories.html', {'categories': categories})
 
+
 # Список приоритетов
 @login_required
 def list_priorities(request):
     priorities = Priority.objects.all()
     return render(request, 'task/list_priorities.html', {'priorities': priorities})
+
 
 # Пример защищённого представления
 @login_required

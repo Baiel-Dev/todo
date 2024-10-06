@@ -3,11 +3,13 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import TaskCustomUser  # Импорт модели TaskCustomUser
 from task.models import Task  # Импорт модели Task
 
+
 # Форма для задач
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = '__all__'  # Использовать все поля модели Task
+        fields = ['title', 'description', 'due_date', 'category', 'priority']  # Указать нужные поля
+
 
 # Форма для регистрации пользователей
 class SignUpForm(UserCreationForm):
@@ -23,3 +25,13 @@ class SignUpForm(UserCreationForm):
         if commit:
             user.save()  # Сохранение пользователя
         return user
+
+
+from django import forms
+from .models import Profile
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio']  # Поля, которые пользователь может редактировать
