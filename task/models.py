@@ -21,6 +21,7 @@ class Task(models.Model):
     due_date = models.DateField(default=timezone.now)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='tasks')
     priority = models.ForeignKey(Priority, on_delete=models.CASCADE, related_name='tasks')
+    user = models.ForeignKey('TaskCustomUser', on_delete=models.CASCADE, related_name='tasks')  # Связь с пользователем
 
     def is_overdue(self):
         return self.due_date < timezone.now().date() and not self.status

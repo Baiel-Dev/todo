@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import TemplateView
 from .forms import SignUpForm, TaskForm
 from .models import Task, Category, Priority
+from django.contrib.auth.decorators import login_required
 
 # Регистрация пользователя
 def register(request):
@@ -37,8 +38,9 @@ class HomeView(TemplateView):
     template_name = 'task/home.html'
 
 # Список задач
+@login_required
 def list_tasks(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.filter(user=request.user)  # Фильтрация задач по пользователю
     categories = Category.objects.all()
     priorities = Priority.objects.all()
     today = timezone.now().date()
@@ -70,9 +72,10 @@ def list_tasks(request):
     )
 
 # Задачи по категории
+@login_required
 def tasks_by_category(request, category_id):
-    category = Category.objects.get(id=category_id)
-    tasks = Task.objects.filter(category=category)
+    category = get_object_or_404(Category, id=category_id)
+    tasks = Task.objects.filter(category=category, user=request.user)  # Фильтрация по пользователю
     return render(
         request,
         'task/task_list.html',
@@ -80,9 +83,10 @@ def tasks_by_category(request, category_id):
     )
 
 # Задачи по приоритету
+@login_required
 def tasks_by_priority(request, priority_id):
-    priority = Priority.objects.get(id=priority_id)
-    tasks = Task.objects.filter(priority=priority)
+    priority = get_object_or_404(Priority, id=priority_id)
+    tasks = Task.objects.filter(priority=priority, user=request.user)  # Фильтрация по пользователю
     return render(
         request,
         'task/task_list.html',
@@ -90,19 +94,23 @@ def tasks_by_priority(request, priority_id):
     )
 
 # Создание задачи
+@login_required
 def create_task(request):
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.save()
+            task = form.save(commit=False)  # Не сохраняем ещё
+            task.user = request.user  # Устанавливаем текущего пользователя
+            task.save()  # Теперь сохраняем
             return redirect('list-task')  # Перенаправление на список задач
     else:
         form = TaskForm()
     return render(request, 'task/create_task.html', {'form': form})
 
 # Редактирование задачи
+@login_required
 def edit_task(request, pk):
-    task = Task.objects.get(pk=pk)
+    task = get_object_or_404(Task, pk=pk, user=request.user)  # Проверка пользователя
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
@@ -113,33 +121,34 @@ def edit_task(request, pk):
     return render(request, 'task/edit_task.html', {'form': form})
 
 # Удаление задачи
+@login_required
 def delete_task(request, pk):
-    task = Task.objects.get(pk=pk)
+    task = get_object_or_404(Task, pk=pk, user=request.user)  # Проверка пользователя
     task.delete()
     return redirect('list-task')  # Перенаправление на список задач
 
 # Переключение статуса задачи
+@login_required
 def toggle_task_status(request, pk):
-    task = Task.objects.get(pk=pk)
-    task.status = True  # Предполагается, что статус завершённой задачи - True
+    task = get_object_or_404(Task, pk=pk, user=request.user)  # Проверка пользователя
+    task.status = not task.status  # Переключение статуса
     task.save()
     return redirect('list-task')  # Перенаправление на список задач
 
 # Список категорий
+@login_required
 def list_categories(request):
     categories = Category.objects.all()
     return render(request, 'task/list_categories.html', {'categories': categories})
 
 # Список приоритетов
+@login_required
 def list_priorities(request):
     priorities = Priority.objects.all()
     return render(request, 'task/list_priorities.html', {'priorities': priorities})
-from django.contrib.auth.decorators import login_required
 
+# Пример защищённого представления
 @login_required
 def some_view(request):
     current_user = request.user
     return render(request, 'some_template.html', {'user': current_user})
-def some_view(request):
-    print(request.user)  # Печатает текущего пользователя в консоль
-    return render(request, 'some_template.html')
