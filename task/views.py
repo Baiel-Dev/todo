@@ -17,9 +17,6 @@ def profile(request, pk):
     return render(request, 'task/profile.html', {'profile': profile})
 
 
-from django.shortcuts import render, redirect
-from .forms import SignUpForm
-from .models import Profile
 
 
 def register(request):
